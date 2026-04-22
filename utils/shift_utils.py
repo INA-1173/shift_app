@@ -6,7 +6,27 @@ from openpyxl.styles import Alignment, Border, Side
 from openpyxl.cell.rich_text import CellRichText, TextBlock
 from openpyxl.cell.text import InlineFont
 
-REQUEST_FILE = "data/shift_requests.csv"
+
+DATA_DIR = "data"
+REQUEST_FILE = os.path.join(DATA_DIR, "shift_requests.csv")
+
+
+def ensure_data_dir():
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+
+def load_requests():
+    ensure_data_dir()
+
+    if os.path.exists(REQUEST_FILE):
+        return pd.read_csv(REQUEST_FILE, encoding="utf-8-sig")
+    else:
+        return pd.DataFrame(columns=["名前", "昼", "夜"])
+
+
+def save_requests(df):
+    ensure_data_dir()
+    df.to_csv(REQUEST_FILE, index=False, encoding="utf-8-sig")
 
 
 def load_requests():
